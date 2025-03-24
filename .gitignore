@@ -1,4 +1,5 @@
 /target
+/kernels/target
 .hf_token
 __pycache__
 *.ptx

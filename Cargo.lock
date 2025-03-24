@@ -363,12 +363,34 @@ dependencies = [
 ]
 
 [[package]]
+name = "candle-core"
+version = "0.8.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "855dfedff437d2681d68e1f34ae559d88b0dd84aa5a6b63f2c8e75ebdd875bbf"
+dependencies = [
+ "byteorder",
+ "gemm",
+ "half",
+ "memmap2",
+ "num-traits",
+ "num_cpus",
+ "rand",
+ "rand_distr",
+ "rayon",
+ "safetensors",
+ "thiserror",
+ "ug",
+ "yoke",
+ "zip",
+]
+
+[[package]]
 name = "candle-examples"
 version = "0.8.1"
 source = "git+https://github.com/huggingface/candle.git#cd639131f04990c16bfc498ea347cb9df3d2374f"
 dependencies = [
  "anyhow",
- "candle-core",
+ "candle-core 0.8.1",
  "candle-hf-hub",
  "candle-nn",
  "candle-transformers",
@@ -389,7 +411,7 @@ source = "git+https://github.com/huggingface/candle.git#cd639131f04990c16bfc498e
 dependencies = [
  "anyhow",
  "bindgen_cuda 0.1.5",
- "candle-core",
+ "candle-core 0.8.1",
  "half",
 ]
 
@@ -439,7 +461,7 @@ version = "0.8.1"
 source = "git+https://github.com/huggingface/candle.git#cd639131f04990c16bfc498ea347cb9df3d2374f"
 dependencies = [
  "accelerate-src",
- "candle-core",
+ "candle-core 0.8.1",
  "candle-metal-kernels",
  "half",
  "intel-mkl-src",
@@ -458,7 +480,7 @@ source = "git+https://github.com/huggingface/candle.git#cd639131f04990c16bfc498e
 dependencies = [
  "accelerate-src",
  "byteorder",
- "candle-core",
+ "candle-core 0.8.1",
  "candle-flash-attn",
  "candle-nn",
  "fancy-regex",
@@ -479,7 +501,7 @@ dependencies = [
  "accelerate-src",
  "anyhow",
  "axum",
- "candle-core",
+ "candle-core 0.8.1",
  "candle-examples",
  "candle-flash-attn",
  "candle-nn",
@@ -1905,7 +1927,7 @@ name = "metal-kernels"
 version = "0.1.0"
 dependencies = [
  "anyhow",
- "candle-core",
+ "candle-core 0.8.2",
  "metal 0.27.0",
  "once_cell",
  "thiserror",
