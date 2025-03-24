@@ -1,4 +1,5 @@
 #include "cuda_compat.h"
+#include "attention/attention_dtypes.h"
 
 namespace vllm
 {
@@ -43,7 +44,7 @@ namespace vllm
                                     // head_size]
       const scalar_t *cache_ptr, const int head_size, const int num_heads,
       const int num_kv_heads, const int rot_dim, const int token_idx,
-      const int64_t query_stride, const int64_t key_stride)
+      const int32_t query_stride, const int32_t key_stride)
   {
     const int embed_dim = rot_dim / 2;
     const scalar_t *cos_ptr = cache_ptr;
@@ -53,7 +54,7 @@ namespace vllm
     for (int i = threadIdx.x; i < nq; i += blockDim.x)
     {
       const int head_idx = i / embed_dim;
-      const int64_t token_head = token_idx * query_stride + head_idx * head_size;
+      const int32_t token_head = token_idx * query_stride + head_idx * head_size;
       const int rot_offset = i % embed_dim;
       apply_token_rotary_embedding<scalar_t, IS_NEOX>(
           query + token_head, cos_ptr, sin_ptr, rot_offset, embed_dim);
@@ -63,7 +64,7 @@ namespace vllm
     for (int i = threadIdx.x; i < nk; i += blockDim.x)
     {
       const int head_idx = i / embed_dim;
-      const int64_t token_head = token_idx * key_stride + head_idx * head_size;
+      const int32_t token_head = token_idx * key_stride + head_idx * head_size;
       const int rot_offset = i % embed_dim;
       apply_token_rotary_embedding<scalar_t, IS_NEOX>(
           key + token_head, cos_ptr, sin_ptr, rot_offset, embed_dim);
@@ -72,7 +73,7 @@ namespace vllm
 
   template <typename scalar_t, bool IS_NEOX>
   __global__ void rotary_embedding_kernel(
-      const int64_t *__restrict__ positions,      // [batch_size, seq_len] or
+      const int32_t *__restrict__ positions,      // [batch_size, seq_len] or
                                                   // [num_tokens]
       scalar_t *__restrict__ query,               // [batch_size, seq_len, num_heads,
                                                   // head_size] or [num_tokens, num_heads,
@@ -82,12 +83,12 @@ namespace vllm
                                                   // head_size]
       const scalar_t *__restrict__ cos_sin_cache, // [max_position, 2, rot_dim //
                                                   // 2]
-      const int rot_dim, const int64_t query_stride, const int64_t key_stride,
+      const int rot_dim, const int32_t query_stride, const int32_t key_stride,
       const int num_heads, const int num_kv_heads, const int head_size)
   {
     // Each thread block is responsible for one token.
     const int token_idx = blockIdx.x;
-    int64_t pos = positions[token_idx];
+    int32_t pos = positions[token_idx];
     const scalar_t *cache_ptr = cos_sin_cache + pos * rot_dim;
 
     apply_rotary_embedding<scalar_t, IS_NEOX>(
@@ -98,23 +99,24 @@ namespace vllm
 } // namespace vllm
 
 extern "C" void rotary_embedding(
-    void *positions, // [batch_size, seq_len] or [num_tokens]
-    void *query,     // [batch_size, seq_len, num_heads * head_size] or
-                     // [num_tokens, num_heads * head_size] or
-                     // [batch_size, seq_len, num_heads, head_size] or
-                     // [num_tokens, num_heads, head_size]
-    void *key,       // [batch_size, seq_len, num_kv_heads * head_size] or
-                     // [num_tokens, num_kv_heads * head_size] or
-                     // [batch_size, seq_len, num_heads, head_size] or
-                     // [num_tokens, num_heads, head_size]
+    void *positions,      // [batch_size, seq_len] or [num_tokens]
+    void *query,          // [batch_size, seq_len, num_heads * head_size] or
+                          // [num_tokens, num_heads * head_size] or
+                          // [batch_size, seq_len, num_heads, head_size] or
+                          // [num_tokens, num_heads, head_size]
+    void *key,            // [batch_size, seq_len, num_kv_heads * head_size] or
+                          // [num_tokens, num_kv_heads * head_size] or
+                          // [batch_size, seq_len, num_heads, head_size] or
+                          // [num_tokens, num_heads, head_size]
     int32_t head_size,
-    int32_t num_tokens, // batch_size * seq_len
+    int32_t num_tokens,   // batch_size * seq_len
     int32_t num_heads,
     int32_t num_kv_heads,
-    int32_t q_stride,
+    int32_t query_stride,
     int32_t key_stride,
     int32_t rot_dim,
-    void *cos_sin_cache, // [max_position, rot_dim]
+    void *cos_sin_cache,  // [max_position, rot_dim]
+    uint32_t dtype,       // 0 => f16; 1 => bf16; 2 => f32
     int32_t stream_)
 {
   // num_tokens = batch_size * seq_len
@@ -161,15 +163,42 @@ extern "C" void rotary_embedding(
   const cudaStream_t stream = (cudaStream_t)stream_;
 
   // TODO: hard coding to just neox type of architecture for now
-  vllm::rotary_embedding_kernel<scalar_t, true><<<grid, block, 0, stream>>>(
-      reinterpret_cast<int64_t *>(positions),
-      reinterpret_cast<scalar_t *>(query),
-      reinterpret_cast<scalar_t *>(key),
-      reinterpret_cast<scalar_t *>(cos_sin_cache),
+
+  if (dtype == 2) {
+    vllm::rotary_embedding_kernel<float, true><<<grid, block, 0, stream>>>(
+      reinterpret_cast<int32_t *>(positions),
+      reinterpret_cast<float *>(query),
+      reinterpret_cast<float *>(key),
+      reinterpret_cast<float *>(cos_sin_cache),
       rot_dim,
       query_stride,
       key_stride,
       num_heads,
       num_kv_heads,
       head_size);
+  } else if (dtype == 0) {
+    vllm::rotary_embedding_kernel<uint16_t, true><<<grid, block, 0, stream>>>(
+      reinterpret_cast<int32_t *>(positions),
+      reinterpret_cast<uint16_t *>(query),
+      reinterpret_cast<uint16_t *>(key),
+      reinterpret_cast<uint16_t *>(cos_sin_cache),
+      rot_dim,
+      query_stride,
+      key_stride,
+      num_heads,
+      num_kv_heads,
+      head_size);
+  } else if (dtype == 1) {
+    vllm::rotary_embedding_kernel<__nv_bfloat16, true><<<grid, block, 0, stream>>>(
+      reinterpret_cast<int32_t *>(positions),
+      reinterpret_cast<__nv_bfloat16 *>(query),
+      reinterpret_cast<__nv_bfloat16 *>(key),
+      reinterpret_cast<__nv_bfloat16 *>(cos_sin_cache),
+      rot_dim,
+      query_stride,
+      key_stride,
+      num_heads,
+      num_kv_heads,
+      head_size);
+  }
 }
