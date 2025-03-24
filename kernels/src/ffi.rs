@@ -1,6 +1,22 @@
 use core::ffi::{c_int, c_long, c_void};
 #[allow(dead_code)]
 extern "C" {
+    pub fn rotary_embedding(
+        positions: *const c_void,
+        query: *const c_void,
+        key: *const c_void,
+        cos_sin_cache: *const c_void,
+        head_size: c_int,
+        num_tokens: c_int,
+        num_heads: c_int,
+        num_kv_heads: c_int,
+        query_stride: c_int,
+        key_stride: c_int,
+        rot_dim: c_int,
+        dtype: u32,
+        stream: i64,
+    );
+
     pub fn call_reshape_and_cache(
         key: *const c_void,
         value: *const c_void,

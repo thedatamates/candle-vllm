@@ -108,6 +108,7 @@ extern "C" void rotary_embedding(
                           // [num_tokens, num_kv_heads * head_size] or
                           // [batch_size, seq_len, num_heads, head_size] or
                           // [num_tokens, num_heads, head_size]
+    void *cos_sin_cache,  // [max_position, rot_dim]
     int32_t head_size,
     int32_t num_tokens,   // batch_size * seq_len
     int32_t num_heads,
@@ -115,9 +116,8 @@ extern "C" void rotary_embedding(
     int32_t query_stride,
     int32_t key_stride,
     int32_t rot_dim,
-    void *cos_sin_cache,  // [max_position, rot_dim]
     uint32_t dtype,       // 0 => f16; 1 => bf16; 2 => f32
-    int32_t stream_)
+    int32_t stream)
 {
   // num_tokens = batch_size * seq_len
   // int64_t num_tokens = positions.numel();
@@ -160,12 +160,12 @@ extern "C" void rotary_embedding(
 
   dim3 grid(num_tokens);
   dim3 block(std::min<int64_t>(num_heads * rot_dim / 2, 512));
-  const cudaStream_t stream = (cudaStream_t)stream_;
+  const cudaStream_t stream_ = (cudaStream_t)stream;
 
   // TODO: hard coding to just neox type of architecture for now
 
   if (dtype == 2) {
-    vllm::rotary_embedding_kernel<float, true><<<grid, block, 0, stream>>>(
+    vllm::rotary_embedding_kernel<float, true><<<grid, block, 0, stream_>>>(
       reinterpret_cast<int32_t *>(positions),
       reinterpret_cast<float *>(query),
       reinterpret_cast<float *>(key),
@@ -177,7 +177,7 @@ extern "C" void rotary_embedding(
       num_kv_heads,
       head_size);
   } else if (dtype == 0) {
-    vllm::rotary_embedding_kernel<uint16_t, true><<<grid, block, 0, stream>>>(
+    vllm::rotary_embedding_kernel<uint16_t, true><<<grid, block, 0, stream_>>>(
       reinterpret_cast<int32_t *>(positions),
       reinterpret_cast<uint16_t *>(query),
       reinterpret_cast<uint16_t *>(key),
@@ -189,7 +189,7 @@ extern "C" void rotary_embedding(
       num_kv_heads,
       head_size);
   } else if (dtype == 1) {
-    vllm::rotary_embedding_kernel<__nv_bfloat16, true><<<grid, block, 0, stream>>>(
+    vllm::rotary_embedding_kernel<__nv_bfloat16, true><<<grid, block, 0, stream_>>>(
       reinterpret_cast<int32_t *>(positions),
       reinterpret_cast<__nv_bfloat16 *>(query),
       reinterpret_cast<__nv_bfloat16 *>(key),
