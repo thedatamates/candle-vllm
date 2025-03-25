@@ -73,7 +73,7 @@ namespace vllm
 
   template <typename scalar_t, bool IS_NEOX>
   __global__ void rotary_embedding_kernel(
-      const int32_t *__restrict__ positions,      // [batch_size, seq_len] or
+      const uint32_t *__restrict__ positions,      // [batch_size, seq_len] or
                                                   // [num_tokens]
       scalar_t *__restrict__ query,               // [batch_size, seq_len, num_heads,
                                                   // head_size] or [num_tokens, num_heads,
@@ -88,7 +88,7 @@ namespace vllm
   {
     // Each thread block is responsible for one token.
     const int token_idx = blockIdx.x;
-    int32_t pos = positions[token_idx];
+    uint32_t pos = positions[token_idx];
     const scalar_t *cache_ptr = cos_sin_cache + pos * rot_dim;
 
     apply_rotary_embedding<scalar_t, IS_NEOX>(
@@ -99,7 +99,7 @@ namespace vllm
 } // namespace vllm
 
 extern "C" void rotary_embedding(
-    void *positions,      // [batch_size, seq_len] or [num_tokens]
+    uint32_t *positions,      // [batch_size, seq_len] or [num_tokens]
     void *query,          // [batch_size, seq_len, num_heads * head_size] or
                           // [num_tokens, num_heads * head_size] or
                           // [batch_size, seq_len, num_heads, head_size] or
@@ -166,7 +166,7 @@ extern "C" void rotary_embedding(
 
   if (dtype == 2) {
     vllm::rotary_embedding_kernel<float, true><<<grid, block, 0, stream_>>>(
-      reinterpret_cast<int32_t *>(positions),
+      positions,
       reinterpret_cast<float *>(query),
       reinterpret_cast<float *>(key),
       reinterpret_cast<float *>(cos_sin_cache),
@@ -178,7 +178,7 @@ extern "C" void rotary_embedding(
       head_size);
   } else if (dtype == 0) {
     vllm::rotary_embedding_kernel<uint16_t, true><<<grid, block, 0, stream_>>>(
-      reinterpret_cast<int32_t *>(positions),
+      positions,
       reinterpret_cast<uint16_t *>(query),
       reinterpret_cast<uint16_t *>(key),
       reinterpret_cast<uint16_t *>(cos_sin_cache),
@@ -190,7 +190,7 @@ extern "C" void rotary_embedding(
       head_size);
   } else if (dtype == 1) {
     vllm::rotary_embedding_kernel<__nv_bfloat16, true><<<grid, block, 0, stream_>>>(
-      reinterpret_cast<int32_t *>(positions),
+      positions,
       reinterpret_cast<__nv_bfloat16 *>(query),
       reinterpret_cast<__nv_bfloat16 *>(key),
       reinterpret_cast<__nv_bfloat16 *>(cos_sin_cache),
