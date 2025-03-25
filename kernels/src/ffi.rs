@@ -2,7 +2,7 @@ use core::ffi::{c_int, c_long, c_void};
 #[allow(dead_code)]
 extern "C" {
     pub fn rotary_embedding(
-        positions: *const c_void,
+        positions: *const c_int,
         query: *const c_void,
         key: *const c_void,
         cos_sin_cache: *const c_void,
