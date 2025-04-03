@@ -1,6 +1,15 @@
 use core::ffi::{c_int, c_long, c_void};
 #[allow(dead_code)]
 extern "C" {
+    pub fn silu_and_mul(
+        out: *const c_void,
+        query: *const c_void,
+        dims: c_int,
+        num_tokens: c_int,
+        dtype: u32,
+        stream: i64,
+    );
+
     pub fn rotary_embedding(
         positions: *const c_int,
         query: *const c_void,

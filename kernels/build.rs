@@ -24,6 +24,7 @@ fn main() -> Result<()> {
     println!("cargo:rerun-if-changed=src/nonzero_bitwise.cu");
     println!("cargo:rerun-if-changed=src/sort.cu");
     println!("cargo:rerun-if-changed=src/pos_encoding_kernels.cu");
+    println!("cargo:rerun-if-changed=src/activation_kernels.cu");
     let build_dir = PathBuf::from(std::env::var("OUT_DIR").unwrap_or("".to_string()));
     let builder = bindgen_cuda::Builder::default().arg("--expt-relaxed-constexpr");
     println!("cargo:info={builder:?}");

@@ -1,3 +1,4 @@
+pub const ACTIVATION_KERNELS: &str = include_str!(concat!(env!("OUT_DIR"), "/activation_kernels.ptx"));
 pub const COPY_BLOCKS_KERNEL: &str = include_str!(concat!(env!("OUT_DIR"), "/copy_blocks_kernel.ptx"));
 pub const GPTQ_CUDA_KERNEL: &str = include_str!(concat!(env!("OUT_DIR"), "/gptq_cuda_kernel.ptx"));
 pub const MARLIN_CUDA_KERNEL: &str = include_str!(concat!(env!("OUT_DIR"), "/marlin_cuda_kernel.ptx"));
