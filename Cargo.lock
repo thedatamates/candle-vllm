@@ -335,7 +335,7 @@ checksum = "514de17de45fdb8dc022b1a7975556c53c86f9f0aa5f534b98977b171857c2c9"
 [[package]]
 name = "candle-core"
 version = "0.8.0"
-source = "git+https://github.com/thedatamates/candle.git?rev=12e7ea3#12e7ea376d62600a35825fe5e508fde14dddfedf"
+source = "git+https://github.com/thedatamates/candle.git?rev=d863a83#d863a83c49c0ae7d6b8d426265283034d4b4b031"
 dependencies = [
  "accelerate-src",
  "byteorder",
@@ -385,7 +385,7 @@ dependencies = [
 [[package]]
 name = "candle-examples"
 version = "0.8.0"
-source = "git+https://github.com/thedatamates/candle.git?rev=12e7ea3#12e7ea376d62600a35825fe5e508fde14dddfedf"
+source = "git+https://github.com/thedatamates/candle.git?rev=d863a83#d863a83c49c0ae7d6b8d426265283034d4b4b031"
 dependencies = [
  "anyhow",
  "candle-core 0.8.0",
@@ -405,7 +405,7 @@ dependencies = [
 [[package]]
 name = "candle-flash-attn"
 version = "0.8.0"
-source = "git+https://github.com/thedatamates/candle.git?rev=12e7ea3#12e7ea376d62600a35825fe5e508fde14dddfedf"
+source = "git+https://github.com/thedatamates/candle.git?rev=d863a83#d863a83c49c0ae7d6b8d426265283034d4b4b031"
 dependencies = [
  "anyhow",
  "bindgen_cuda 0.1.5",
@@ -437,7 +437,7 @@ dependencies = [
 [[package]]
 name = "candle-kernels"
 version = "0.8.0"
-source = "git+https://github.com/thedatamates/candle.git?rev=12e7ea3#12e7ea376d62600a35825fe5e508fde14dddfedf"
+source = "git+https://github.com/thedatamates/candle.git?rev=d863a83#d863a83c49c0ae7d6b8d426265283034d4b4b031"
 dependencies = [
  "bindgen_cuda 0.1.5",
 ]
@@ -445,7 +445,7 @@ dependencies = [
 [[package]]
 name = "candle-metal-kernels"
 version = "0.8.0"
-source = "git+https://github.com/thedatamates/candle.git?rev=12e7ea3#12e7ea376d62600a35825fe5e508fde14dddfedf"
+source = "git+https://github.com/thedatamates/candle.git?rev=d863a83#d863a83c49c0ae7d6b8d426265283034d4b4b031"
 dependencies = [
  "metal",
  "once_cell",
@@ -456,7 +456,7 @@ dependencies = [
 [[package]]
 name = "candle-nn"
 version = "0.8.0"
-source = "git+https://github.com/thedatamates/candle.git?rev=12e7ea3#12e7ea376d62600a35825fe5e508fde14dddfedf"
+source = "git+https://github.com/thedatamates/candle.git?rev=d863a83#d863a83c49c0ae7d6b8d426265283034d4b4b031"
 dependencies = [
  "accelerate-src",
  "candle-core 0.8.0",
@@ -475,7 +475,7 @@ dependencies = [
 [[package]]
 name = "candle-transformers"
 version = "0.8.0"
-source = "git+https://github.com/thedatamates/candle.git?rev=12e7ea3#12e7ea376d62600a35825fe5e508fde14dddfedf"
+source = "git+https://github.com/thedatamates/candle.git?rev=d863a83#d863a83c49c0ae7d6b8d426265283034d4b4b031"
 dependencies = [
  "accelerate-src",
  "byteorder",
