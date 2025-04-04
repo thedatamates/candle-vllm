@@ -15,17 +15,17 @@ anyhow = "1.0.75"
 rand = "0.8.5"
 rayon = "1.10.0"
 hyper = { version = "0.14", features = ["full"] }
-candle-core = { git = "https://github.com/thedatamates/candle-tdm.git", rev = "6400bd7" }
-candle-examples = { git = "https://github.com/thedatamates/candle-tdm.git", rev = "6400bd7" }
+candle-core = { git = "https://github.com/thedatamates/candle-tdm.git", rev = "4b659fc" }
+candle-examples = { git = "https://github.com/thedatamates/candle-tdm.git", rev = "4b659fc" }
 #candle-lora = { git = "https://github.com/EricLBuehler/candle-lora.git", version = "0.2.0" }
 #candle-lora-macro = { git = "https://github.com/EricLBuehler/candle-lora.git", version = "0.2.0" }
 #candle-lora-transformers = { git = "https://github.com/EricLBuehler/candle-lora.git", version = "0.2.0" }
-candle-nn = { git = "https://github.com/thedatamates/candle-tdm.git", rev = "6400bd7" }
+candle-nn = { git = "https://github.com/thedatamates/candle-tdm.git", rev = "4b659fc" }
 dyn-fmt = "0.4.0"
 serde = { version = "1.0.190", features = ["serde_derive"] }
 tokenizers = "0.19.1"
 uuid = { version = "1.5.0", features = ["v4"] }
-candle-transformers = { git = "https://github.com/thedatamates/candle-tdm.git", rev = "6400bd7" }
+candle-transformers = { git = "https://github.com/thedatamates/candle-tdm.git", rev = "4b659fc" }
 hf-hub = "0.3.2"
 serde_json = "1.0.108"
 derive_more = "0.99.17"
@@ -39,7 +39,7 @@ half = { version = "2.5.0", features = [
     "use-intrinsics",
     "rand_distr",
 ] }
-candle-flash-attn = { git = "https://github.com/thedatamates/candle-tdm.git", rev = "6400bd7", optional = true }
+candle-flash-attn = { git = "https://github.com/thedatamates/candle-tdm.git", rev = "4b659fc", optional = true }
 clap = { version = "4.4.7", features = ["derive"] }
 #candle-sampling = { git = "https://github.com/EricLBuehler/candle-sampling.git", version = "0.2.0" }
 futures = "0.3.29"
