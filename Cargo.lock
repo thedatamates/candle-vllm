@@ -335,7 +335,8 @@ checksum = "514de17de45fdb8dc022b1a7975556c53c86f9f0aa5f534b98977b171857c2c9"
 [[package]]
 name = "candle-core"
 version = "0.8.4"
-source = "git+https://github.com/thedatamates/candle-tdm.git?rev=6cea908#6cea9082dfe0140d6fc95e20ad193e9282c400ad"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "06ccf5ee3532e66868516d9b315f73aec9f34ea1a37ae98514534d458915dbf1"
 dependencies = [
  "accelerate-src",
  "byteorder",
@@ -363,33 +364,13 @@ dependencies = [
 ]
 
 [[package]]
-name = "candle-core"
-version = "0.8.4"
-source = "git+https://github.com/thedatamates/candle-tdm.git?rev=deb319c#deb319c70ddbf5c619014a1d623e45e0bbd00d18"
-dependencies = [
- "byteorder",
- "gemm 0.17.1",
- "half",
- "memmap2",
- "num-traits",
- "num_cpus",
- "rand 0.9.0",
- "rand_distr",
- "rayon",
- "safetensors",
- "thiserror 1.0.61",
- "ug",
- "yoke",
- "zip",
-]
-
-[[package]]
 name = "candle-examples"
 version = "0.8.4"
-source = "git+https://github.com/thedatamates/candle-tdm.git?rev=6cea908#6cea9082dfe0140d6fc95e20ad193e9282c400ad"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "591e79861e0519bb7e5f425a7dac77582213aba9c6aa91f6e61729829fc1a2cd"
 dependencies = [
  "anyhow",
- "candle-core 0.8.4 (git+https://github.com/thedatamates/candle-tdm.git?rev=6cea908)",
+ "candle-core",
  "candle-nn",
  "candle-transformers",
  "csv",
@@ -406,18 +387,20 @@ dependencies = [
 [[package]]
 name = "candle-flash-attn"
 version = "0.8.4"
-source = "git+https://github.com/thedatamates/candle-tdm.git?rev=6cea908#6cea9082dfe0140d6fc95e20ad193e9282c400ad"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2dc08e6b4740a54e30d70cca5759de9c805b85279de662b091ea135077f24ce3"
 dependencies = [
  "anyhow",
  "bindgen_cuda 0.1.5",
- "candle-core 0.8.4 (git+https://github.com/thedatamates/candle-tdm.git?rev=6cea908)",
+ "candle-core",
  "half",
 ]
 
 [[package]]
 name = "candle-kernels"
 version = "0.8.4"
-source = "git+https://github.com/thedatamates/candle-tdm.git?rev=6cea908#6cea9082dfe0140d6fc95e20ad193e9282c400ad"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a10885bd902fad1b8518ba2b22369aaed88a3d94e123533ad3ca73db33b1c8ca"
 dependencies = [
  "bindgen_cuda 0.1.5",
 ]
@@ -425,7 +408,8 @@ dependencies = [
 [[package]]
 name = "candle-metal-kernels"
 version = "0.8.4"
-source = "git+https://github.com/thedatamates/candle-tdm.git?rev=6cea908#6cea9082dfe0140d6fc95e20ad193e9282c400ad"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "52c85c21827c28db94e7112e364abe7e0cf8d2b022c014edf08642be6b94f21e"
 dependencies = [
  "metal 0.27.0",
  "once_cell",
@@ -436,10 +420,11 @@ dependencies = [
 [[package]]
 name = "candle-nn"
 version = "0.8.4"
-source = "git+https://github.com/thedatamates/candle-tdm.git?rev=6cea908#6cea9082dfe0140d6fc95e20ad193e9282c400ad"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "be1160c3b63f47d40d91110a3e1e1e566ae38edddbbf492a60b40ffc3bc1ff38"
 dependencies = [
  "accelerate-src",
- "candle-core 0.8.4 (git+https://github.com/thedatamates/candle-tdm.git?rev=6cea908)",
+ "candle-core",
  "candle-metal-kernels",
  "half",
  "intel-mkl-src",
@@ -454,11 +439,12 @@ dependencies = [
 [[package]]
 name = "candle-transformers"
 version = "0.8.4"
-source = "git+https://github.com/thedatamates/candle-tdm.git?rev=6cea908#6cea9082dfe0140d6fc95e20ad193e9282c400ad"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "94a0900d49f8605e0e7e6693a1f560e6271279de98e5fa369e7abf3aac245020"
 dependencies = [
  "accelerate-src",
  "byteorder",
- "candle-core 0.8.4 (git+https://github.com/thedatamates/candle-tdm.git?rev=6cea908)",
+ "candle-core",
  "candle-flash-attn",
  "candle-nn",
  "fancy-regex",
@@ -479,7 +465,7 @@ dependencies = [
  "accelerate-src",
  "anyhow",
  "axum",
- "candle-core 0.8.4 (git+https://github.com/thedatamates/candle-tdm.git?rev=6cea908)",
+ "candle-core",
  "candle-examples",
  "candle-flash-attn",
  "candle-nn",
@@ -1516,9 +1502,9 @@ dependencies = [
 
 [[package]]
 name = "half"
-version = "2.5.0"
+version = "2.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7db2ff139bba50379da6aa0766b52fdcb62cb5b263009b09ed58ba604e14bbd1"
+checksum = "459196ed295495a68f7d7fe1d84f6c4b7ff0e21fe3017b2f283c6fac3ad803c9"
 dependencies = [
  "bytemuck",
  "cfg-if",
@@ -2088,7 +2074,7 @@ name = "metal-kernels"
 version = "0.1.0"
 dependencies = [
  "anyhow",
- "candle-core 0.8.4 (git+https://github.com/thedatamates/candle-tdm.git?rev=deb319c)",
+ "candle-core",
  "metal 0.27.0",
  "once_cell",
  "thiserror 1.0.61",
